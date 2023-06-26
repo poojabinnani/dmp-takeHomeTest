@@ -2,8 +2,11 @@ package com.interview.assignment.dmptakeHome.utils;
 
 import com.interview.assignment.dmptakeHome.exceptions.ApiRequestException;
 import com.interview.assignment.dmptakeHome.model.TransactionDto;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
+
+/**
+ * This class handles the validations on the request
+ */
 public class Validator {
     public static void validateMethodArgument(TransactionDto transactionDto) throws ApiRequestException {
 

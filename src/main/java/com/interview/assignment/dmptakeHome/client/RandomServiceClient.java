@@ -1,5 +1,6 @@
 package com.interview.assignment.dmptakeHome.client;
 
+import com.interview.assignment.dmptakeHome.exceptions.ApiRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +41,9 @@ public class RandomServiceClient {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-        assert response != null;
+        if (response == null) {
+            throw new RuntimeException("Response from Random client service is null");
+        }
         return response.split("\\r?\\n");
 
     }
