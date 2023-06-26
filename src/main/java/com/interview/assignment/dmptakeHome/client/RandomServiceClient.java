@@ -17,13 +17,29 @@ import reactor.core.publisher.Mono;
 public class RandomServiceClient {
     WebClient client;
 
+    private RandomServiceClient(){
+        //Stop creation of object by default constructor.
+    }
+
     @Autowired
     public RandomServiceClient(@Value("${rest.randomservice.baseUrl}") String baseUrl) {
         this.client = WebClient.builder().baseUrl(baseUrl).build();
     }
 
     public String[] getTransactionByDay() {
-        String response = this.client.get().uri("/integers/?num=7&min=0&max=12&col=1&base=10&format=plain&rnd=new").retrieve().bodyToMono(String.class).block();
+        String response = this.client.get().uri(uriBuilder -> uriBuilder
+                        .path("/integers/")
+                        .queryParam("num", 7)
+                        .queryParam("min", 0)
+                        .queryParam("max", 12)
+                        .queryParam("col", 1)
+                        .queryParam("base", 10)
+                        .queryParam("format", "plain")
+                        .queryParam("rnd", "new")
+                        .build())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
         assert response != null;
         return response.split("\\r?\\n");
 

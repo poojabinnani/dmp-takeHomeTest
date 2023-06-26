@@ -103,10 +103,6 @@ public class TransactionDto implements Serializable
         sb.append('=');
         sb.append(((this.transaction == null)?"<null>":this.transaction));
         sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
-        sb.append(',');
         if (sb.charAt((sb.length()- 1)) == ',') {
             sb.setCharAt((sb.length()- 1), ']');
         } else {

@@ -19,4 +19,6 @@ public class TransactionResponse implements Serializable {
     private Double transactionAmount;
 
     private int cardUsageCount;
+
+    private String errorMessage;
 }

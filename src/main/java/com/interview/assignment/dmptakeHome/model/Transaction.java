@@ -1,18 +1,15 @@
 
 package com.interview.assignment.dmptakeHome.model;
 
-import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import javax.annotation.Generated;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 
 /**
@@ -38,10 +35,9 @@ public class Transaction implements Serializable
      * 
      */
     @JsonProperty("cardNum")
-    @DecimalMin("1000000000000000")
-    @DecimalMax("9999999999999999")
-    @NotNull
-    @Valid
+    @DecimalMin(value = "1000000000000000", message = "Card number cannot be less than 1000000000000000")
+    @DecimalMax(value = "9999999999999999", message = "Card number cannot be greater than 9999999999999999")
+    @NotNull(message = "Card number is mandatory")
     private Long cardNum = 9999999999999999L;
     /**
      * amount
@@ -51,11 +47,9 @@ public class Transaction implements Serializable
      * 
      */
     @JsonProperty("amount")
-    @NotNull
+    @NotNull(message = "Transaction amount is mandatory")
     private Double amount = 0.0D;
-    @JsonIgnore
-    @Valid
-    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
+
     private final static long serialVersionUID = -6747408796958578611L;
 
     /**
@@ -122,15 +116,11 @@ public class Transaction implements Serializable
         sb.append(Transaction.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("cardNum");
         sb.append('=');
-        sb.append(((this.cardNum == null)?"<null>":this.cardNum));
+        sb.append(((this.cardNum == null)?"<null>":getMaskedCardNumber(this.cardNum)));
         sb.append(',');
         sb.append("amount");
         sb.append('=');
         sb.append(((this.amount == null)?"<null>":this.amount));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
         sb.append(',');
         if (sb.charAt((sb.length()- 1)) == ',') {
             sb.setCharAt((sb.length()- 1), ']');
@@ -138,6 +128,17 @@ public class Transaction implements Serializable
             sb.append(']');
         }
         return sb.toString();
+    }
+
+    private String getMaskedCardNumber(Long cardNum) {
+        String cardNumberInString = String.valueOf(cardNum);
+        int numberOfInitialCharsNotToMask = 4;
+        int numberOfEndCharsNotToMask = 4;
+        // index 4-11
+        String innerString = cardNumberInString.substring(numberOfInitialCharsNotToMask, cardNumberInString.length()-numberOfEndCharsNotToMask);
+        innerString = innerString.replaceAll("[0-9]", "*");
+        //index 0-3 + 4-11 + 12-15
+        return cardNumberInString.substring(0, numberOfInitialCharsNotToMask) +  innerString + cardNumberInString.substring(cardNumberInString.length()-numberOfEndCharsNotToMask, cardNumberInString.length());
     }
 
 }
